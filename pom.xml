@@ -13,5 +13,60 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+    <dependencies>
+
+        <!-- Flink Streaming API (Java) -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
+        <!-- Flink Table API -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
+        <!-- Flink Table Runtime -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-runtime</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
+        <!-- Flink S3 Connector (Hadoop-based) -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-s3-fs-hadoop</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+
+
+        <!-- InfluxDB Client (For InfluxDB 2.0) -->
+        <dependency>
+            <groupId>com.influxdb</groupId>
+            <artifactId>influxdb-client-java</artifactId>
+            <version>6.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-metrics-influxdb</artifactId>
+            <version>1.20.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Paimon Flink Connector 1.0.0 (For Flink 1.20) -->
+        <dependency>
+            <groupId>org.apache.paimon</groupId>
+            <artifactId>paimon-flink-1.20</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+
+
+
 </project>

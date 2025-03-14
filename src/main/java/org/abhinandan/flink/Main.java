@@ -1,4 +1,4 @@
-package org.abhinandan;
+package org.abhinandan.flink;
 
 public class Main {
     public static void main(String[] args) {
