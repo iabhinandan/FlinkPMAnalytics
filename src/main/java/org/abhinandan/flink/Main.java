@@ -1,24 +1,50 @@
 package org.abhinandan.flink;
 
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.core.fs.FileSystem;
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        // Create Flink execution environment
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+        // Set up the execution environment
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);  // Make sure you are running with one thread locally
 
-        // Create a simple DataStream
-        DataStream<String> text = env.fromElements("Hello", "Flink", "World!");
+        System.out.println(System.getenv("AWS_ACCESS_KEY"));
+        System.out.println(System.getenv("AWS_SECRET_KEY"));
 
-        // Process DataStream
-        DataStream<String> result = text.map((MapFunction<String, String>) value -> "Processed: " + value).rebalance();
+        Configuration config = new Configuration();
+        config.setString("fs.s3a.access.key", "");
+        config.setString("fs.s3a.secret.key", "");
+        config.setString("fs.s3a.endpoint", "s3.us-west-2.amazonaws.com"); // Use HTTP, not HTTPS
+        config.setString("fs.s3a.path.style.access", "true");
 
-        // Print the output
-        result.print();
 
-        // Execute Flink job
-        env.execute("Flink Hello World");
+
+        env.configure(config);
+
+        // Create a FileSystem object
+        FileSystem fs = FileSystem.get(new Path("s3://flinks3integration/completed-jobs/sample/Azure/").toUri());
+
+        // Listing files in a given bucket
+        String directoryPath = "s3://flinks3integration/completed-jobs/sample/Azure/";  // Change this to your bucket path
+        Path path = new Path(directoryPath);
+        org.apache.flink.core.fs.FileStatus[] fileStatuses = fs.listStatus(path);
+
+        for (org.apache.flink.core.fs.FileStatus status : fileStatuses) {
+            System.out.println(status.getPath());
+        }
+
+        // Your Flink job
+        env.fromElements("Hello", "Flink", "World")
+                .map(value -> value + " processed")
+                .print();  // Print the transformed elements
+
+
+
+        // Execute the job
+        env.execute("Flink Local Job");
     }
 }
