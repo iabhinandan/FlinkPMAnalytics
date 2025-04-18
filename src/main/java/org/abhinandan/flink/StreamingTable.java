@@ -82,7 +82,7 @@ public class StreamingTable {
                 .setBootstrapServers("localhost:9092") // Kafka broker
                 .setTopics("pm_data_topic") // Kafka topic to consume
                 .setGroupId("my_consumer_group") // Consumer group
-                .setStartingOffsets(OffsetsInitializer.earliest()) // Start consuming from the beginning
+                .setStartingOffsets(OffsetsInitializer.latest()) // Start consuming from the beginning
                 .setValueOnlyDeserializer(new SimpleStringSchema()) // Deserializer for message values
                 .build();
 
@@ -253,7 +253,7 @@ public class StreamingTable {
 
         tableEnv.executeSql("USE CATALOG network_performance_catalog");
         tableEnv.executeSql("USE pm_database");
-        tableEnv.executeSql("drop table  IF EXISTS network_performance_flat");
+        //tableEnv.executeSql("drop table  IF EXISTS network_performance_flat");
         tableEnv.executeSql("SHOW TABLES").print();
 //        String createTableSQL = "CREATE TABLE IF NOT EXISTS network_performance_flat (\n" +
 //                "    pm_event_timestamp STRING,\n" +
@@ -303,8 +303,6 @@ public class StreamingTable {
                 ");");
 
 
-
-
         LOGGER.info("Table 'network_performance_flat' created.");
         tableEnv.executeSql("SHOW TABLES").print();
         // Convert the Row DataStream to a Table
@@ -334,7 +332,7 @@ public class StreamingTable {
 //        tableEnv.executeSql(
 //                "SELECT * FROM network_performance_flat").print();
 
-        env.execute("Flink Local Job");
+        env.execute("Flink Local Paimon Data lake Job");
         //Runtime.getRuntime().addShutdownHook(new Thread(() -> influxDBClient.close()));
 
         //ShutdownHookManager.get().clearShutdownHooks();
